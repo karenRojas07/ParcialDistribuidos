@@ -3,14 +3,18 @@ package co.edu.uptc.animals_rest.services;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 
+import co.edu.uptc.animals_rest.models.CategoryCount;
 import org.springframework.stereotype.Service;
 
 import co.edu.uptc.animals_rest.exception.InvalidRangeException;
 import co.edu.uptc.animals_rest.models.Animal;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +62,24 @@ public class AnimalService {
         }
     
         return animales;
+    }
+
+    public List<CategoryCount> getNumberByCategory() throws IOException {
+        List<String> listAnimal = Files.readAllLines(Paths.get(filePath));
+        Map<String, Integer> categoryCountMap = new HashMap<>();
+
+        for (String line : listAnimal) {
+            String[] parts = line.split(",");
+            if (parts.length == 2) {
+                String category = parts[0].trim();
+                categoryCountMap.put(category, categoryCountMap.getOrDefault(category, 0) + 1);
+            }
+        }
+
+        // Convert the map to a list of CategoryCount objects
+        return categoryCountMap.entrySet().stream()
+                .map(entry -> new CategoryCount(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
     }
 }
 

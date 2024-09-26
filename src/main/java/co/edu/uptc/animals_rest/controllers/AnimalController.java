@@ -3,6 +3,7 @@ package co.edu.uptc.animals_rest.controllers;
 import java.io.IOException;
 import java.util.List;
 
+import co.edu.uptc.animals_rest.models.CategoryCount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,12 @@ public class AnimalController {
     public List<Animal> getAnimal(@RequestParam int from, @RequestParam int to) throws IOException {
         logger.info("getAnimal called with parameters: from = {}, to = {}", from, to);
         return animalService.getAnimalInRange(from, to);
+    }
+
+    @GetMapping("/numberByCategory")
+    public List<CategoryCount> getNumberByCategory() throws IOException {
+        logger.info("getNumberByCategory called");
+        return animalService.getNumberByCategory();
     }
 
 
