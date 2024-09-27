@@ -16,15 +16,13 @@ import co.edu.uptc.animals_rest.models.Animal;
 import co.edu.uptc.animals_rest.services.AnimalService;
 
 
-
-
 @RestController
 @RequestMapping("/animal")
 public class AnimalController {
 
- private static final Logger logger = LoggerFactory.getLogger(AnimalController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AnimalController.class);
 
-   @Autowired
+    @Autowired
     private AnimalService animalService;
 
 
@@ -42,8 +40,15 @@ public class AnimalController {
 
     @GetMapping("/numberByCategory")
     public List<CategoryCount> getNumberByCategory() throws IOException {
-        logger.info("getNumberByCategory called");
-        return animalService.getNumberByCategory();
+        try {
+            logger.info("getNumberByCategory called");
+            return animalService.getNumberByCategory();
+        } catch (IOException e) {
+            // Manejar el error imprimiendo el mensaje en consola
+            System.out.println(":( Error al acceder a uno de los archivos. Por favor verifica la ruta.");
+            System.out.println("Ruta de archivo incorrecta: " + e.getMessage());
+            return null; // O puedes devolver un error 500 u otro mensaje personalizado
+        }
     }
 
 
